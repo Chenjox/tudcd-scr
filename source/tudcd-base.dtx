@@ -1,0 +1,88 @@
+% \iffalse meta-comment
+%/GitFileInfo=tudcd-base.dtx
+%
+%  TUDCD-Script -- Corporate Design of Technische Universität Dresden
+% ----------------------------------------------------------------------------
+%
+%  Copyright (C) Jochen Diepelt <David.diepelt@gmx.net>, 2025
+%
+% ----------------------------------------------------------------------------
+%
+%  This work may be distributed and/or modified under the conditions of the
+%  LaTeX Project Public License, either version 1.3c of this license or
+%  any later version. The latest version of this license is in
+%    http://www.latex-project.org/lppl.txt
+%  and version 1.3c or later is part of all distributions of
+%  LaTeX version 2008-05-04 or later.
+%
+%  This work has the LPPL maintenance status "maintained".
+%
+%  The current maintainer and author of this work is Jochen Diepelt.
+%
+% ----------------------------------------------------------------------------
+%
+% \fi
+%
+% \iffalse ins:batch + dtx:driver
+%<*ins>
+\ifx\documentclass\undefined
+  \input docstrip.tex
+  \ifToplevel{\batchinput{tudcd.ins}}
+\else
+  \let\endbatchfile\relax
+\fi
+\endbatchfile
+%</ins>
+%<*dtx>
+\ProvidesFile{tudcd-base.dtx}[2025/10/02]
+\RequirePackage{scrlfile}
+\ReplaceClass{article}{scrartcl}
+\BeforePackage{doc}{\let\oldmaketitle\maketitle}
+\documentclass[english,ngerman]{ltxdoc}
+\let\maketitle\oldmaketitle
+\usepackage[T1]{fontenc}
+\usepackage[ngerman=ngerman-x-latest]{hyphsubst}
+
+\usepackage{babel}
+\usepackage[babel]{microtype}
+\RecordChanges
+\begin{document} % Diese Dokumentation dokumentiert NUR diese Datei
+  \title{\Large Dokumentation der Datei \texttt{\jobname.dtx} \\
+  \normalsize Generiert durch \texttt{\$ enginetex \jobname.dtx}}
+  \author{Jochen Diepelt}
+  \maketitle
+  \tableofcontents
+
+  \DocInput{tudcd-base.dtx}
+\end{document}
+%</dtx>
+% \fi
+%
+% \selectlanguage{ngerman}
+%
+% \section{Grundlegende Einstellungen und Deklaration des \texttt{keyval} Interfaces}
+%
+% Es stellt sich heraus, dass das CD der Technischen Universität Dresden in einem Raster gesetzt werden kann,
+% wobei es eine Variante mit Marginalie und eine Variante ohne Marginalie gibt.
+% Weiterhin wird gefordert, dass das Raster so gut wie möglich umgesetzt werden kann, sollte ein Nutzer dies wünschen.
+% Auch kann es für den Druck sinnvoll sein, von einem farbigen Design in ein schwarz-weiß Design wechseln zu können.
+% Daraus ergibt sich die Notwendigkeit die Möglichkeiten von \KOMAScript{} ausnutzen zu können
+%    \begin{macrocode}
+\RequirePackage{scrbase}
+%    \end{macrocode}
+% \begin{macro}{\TUDCDProcessOptions,\TUDCDExecuteOptions,\TUDCDoptions,\TUDCDoption}
+% Mit den Möglichkeiten von \KOMAScript{} wird eine Familie an Optionen definiert, welche in den einzelnen Klassen specifiziert werden können.
+% Dabei wird zuerst eine Familie angelegt, und, in Analogie zu Falk Hanischs implementierung, entsprechende Befehle angelegt:
+%    \begin{macrocode}
+\DefineFamily{TUDCD}
+\newcommand*\TUDCDProcessOptions[1][.\@currname.\@currext]{%
+  \FamilyProcessOptions[{#1}]{TUDCD}%
+}
+\newcommand*\TUDCDExecuteOptions[1][.\@currname.\@currext]{%
+  \FamilyExecuteOptions[{#1}]{TUDCD}%
+}
+\newcommand*\TUDCDoptions{\FamilyOptions{TUDCD}}
+\newcommand*\TUDCDoption{\FamilyOption{TUDCD}}
+%    \end{macrocode}
+% Damit können praktischerweise die gesetzten Werte mit |\TUDCDProcessOptions| und |\TUDCDExecuteOptions| ausgeführt werden.
+% \end{macro}
