@@ -1,0 +1,194 @@
+% \iffalse meta-comment
+%/GitFileInfo=tudcd-base.dtx
+%
+%  TUDCD-Script -- Corporate Design of Technische Universität Dresden
+% ----------------------------------------------------------------------------
+%
+%  Copyright (C) Jochen Diepelt <David.diepelt@gmx.net>, 2025
+%
+% ----------------------------------------------------------------------------
+%
+%  This work may be distributed and/or modified under the conditions of the
+%  LaTeX Project Public License, either version 1.3c of this license or
+%  any later version. The latest version of this license is in
+%    http://www.latex-project.org/lppl.txt
+%  and version 1.3c or later is part of all distributions of
+%  LaTeX version 2008-05-04 or later.
+%
+%  This work has the LPPL maintenance status "maintained".
+%
+%  The current maintainer and author of this work is Jochen Diepelt.
+%
+% ----------------------------------------------------------------------------
+%
+% \fi
+%
+% \iffalse ins:batch + dtx:driver
+%<*ins>
+\ifx\documentclass\undefined
+  \input docstrip.tex
+  \ifToplevel{\batchinput{tudcd.ins}}
+\else
+  \let\endbatchfile\relax
+\fi
+\endbatchfile
+%</ins>
+%<*dtx>
+\ProvidesFile{tudcd-area.dtx}[2025/10/02]
+\documentclass[english,ngerman]{tudcddoc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman=ngerman-x-latest]{hyphsubst}
+
+\usepackage{babel}
+\usepackage[babel]{microtype}
+\RecordChanges
+\begin{document} % Diese Dokumentation dokumentiert NUR diese Datei
+  \title{\Large Dokumentation der Datei \texttt{\jobname.dtx} \\
+  \normalsize Generiert durch \texttt{\$ enginetex \jobname.dtx}}
+  \author{Jochen Diepelt}
+  \maketitle
+  \tableofcontents
+
+  \DocInput{tudcd-area.dtx}
+\end{document}
+%</dtx>
+% \fi
+% \iffalse
+%<*body&class>
+% \fi
+% \selectlanguage{ngerman}
+%
+% \section{Die Seitengeometrie}
+%
+% In Abhängigkeit der benötigten Klassen wird die jeweilige \KOMAScript{} Basisklasse gewählt
+%
+% \subsection{Die Umsetzung der Seitengeometrie}
+%
+% Um die Seitengeometrie einzustellen wird die Steckdose \tsobj[socket]{tudcd/pagearea} angelegt.
+%
+% \begin{codedescribe}[socket,new=0.5.0]{tudcd/pagearea}
+% \begin{codesyntax}
+% \tstuddocsocket{tudcd/pagearea}{}
+% \end{codesyntax}
+% Mittels dieser Steckdose wird die Seitengeometrie festgelegt. Es wird ein Standardstecker bereitgestellt,
+% es können aber auch andere Stecker hier eingesteckt werden.
+% Es wird dabei das Papierformat im ersten Argument übergeben.
+%    \begin{macrocode}
+\NewSocket{tudcd/pagearea}{0}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% Anschließend werden die relevanten Längen des \CD{} definiert.
+%
+% \begin{codedescribe}[
+% macro,
+% new=0.5.0]{
+% \tudcd@outermargin,
+% \tudcd@innermargin,
+% \tudcd@logoheight,
+% \tudcd@secondlogoheight,
+% \tudcd@exclusionheight,
+% \tudcd@bottommargin,
+% \tudcd@qrheight}
+% Diese Längen werden im Verarbeiten der Optionen der Klasse gesetzt.
+%    \begin{macrocode}
+\newlength\tudcd@outermargin%
+\newlength\tudcd@innermargin%
+\newlength\tudcd@logoheight%
+\newlength\tudcd@secondlogoheight%
+\newlength\tudcd@exclusionheight%
+\newlength\tudcd@bottommargin%
+\newlength\tudcd@qrheight%
+%    \end{macrocode}
+% Die Bezeichnungen leiten sich dabei aus dem Leitfaden ab.
+% \end{codedescribe}
+%
+%
+% \begin{codedescribe}[
+% plug,
+% new=0.5.0]{usecdgeometry}
+% \begin{codesyntax}
+% \tstuddocplug{tudcd/pagearea}{usecdgeometry}
+% \end{codesyntax}
+% Anschließend wird der Standardstecker \tsobj[plug]{usecdgeometry} definiert
+% dafür bedarf es dem Paket \tsobj[pkg]{geometry}.
+%    \begin{macrocode}
+\NewSocketPlug{tudcd/pagearea}{usecdgeometry}{
+  \RequirePackage{geometry}%
+  \geometry{%
+    paper=\tudcd@selectedpaperformat,%
+    inner=\tudcd@innermargin,%
+    outer=\tudcd@outermargin,%
+    top=\tudcd@outermargin,%
+    bottom=\tudcd@bottommargin%
+  }
+}
+%    \end{macrocode}
+% Da der Stecker \tsobj[plug]{usecdgeometry} dem Standardvorgehen entspricht wird dieser standardmäßig eingesteckt
+%    \begin{macrocode}
+\AssignSocketPlug{tudcd/pagearea}{usecdgeometry}%
+%    \end{macrocode}
+% \end{codedescribe}
+%
+%
+%
+% Für das Standardvorgehen
+% \iffalse ^^A Guards für den wechsel von Ausführungsteil zu Optionenteil
+%</body&class>
+%<*option&class>
+% \fi
+%
+% \subsection{Das Schlüssel Interface für \tsobj[pkg]{tudcd-area}}
+%
+% Es wird das Makro \tsobj[macro]{\tudcd@selectedpaperformat} definiert, welches die ausgewählte Papiergröße definiert
+%    \begin{macrocode}
+\newcommand\tudcd@selectedpaperformat{a4paper}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\tudcd@NumericalKey{paper}[a4paper]{tudcd@paperselection}{%
+  {a4}{4},{a4paper}{4},%
+  {a3}{3},{a3paper}{3}%
+}
+%    \end{macrocode}
+% Anschließend werden über \tsobj[macro]{\geometry} die Maße ausgewählten Formats als Standardgeometrie festgelegt.
+% Da die Option erst spät verarbeitet wird,
+% wird die Einstellung der Seitengeometrie an den Haken \tsobj[hook]{begindocument/before} gehangen.
+%    \begin{macrocode}
+\AddToHook{begindocument/before}{
+\TUDCDProcessOptions%
+\typeout{Selected Paper = \tudcd@paperselection}
+\tudcd@switchcase{string}{\tudcd@paperselection}
+{
+  {4}{
+    \setlength\tudcd@outermargin{15mm}%
+    \setlength\tudcd@innermargin{10mm}%
+    \setlength\tudcd@logoheight{22.5mm}%
+    \setlength\tudcd@secondlogoheight{15mm}%
+    \setlength\tudcd@exclusionheight{5mm}%
+    \setlength\tudcd@bottommargin{23.767mm}
+    \setlength\tudcd@qrheight{15mm}%
+    \renewcommand\tudcd@selectedpaperformat{a4paper}%
+    \FamilyKeyStateProcessed%
+  }
+  {3}{
+    \setlength\tudcd@outermargin{15mm}%
+    \setlength\tudcd@innermargin{10mm}%
+    \setlength\tudcd@logoheight{22.5mm}%
+    \setlength\tudcd@secondlogoheight{15mm}%
+    \setlength\tudcd@exclusionheight{5mm}%
+    \setlength\tudcd@qrheight{15mm}%
+    \renewcommand\tudcd@selectedpaperformat{a3paper}%
+    \FamilyKeyStateProcessed%
+  }
+}{%
+\ClassError{tudcd-area}{%
+Illegal paper format '\tudcd@paperselection' given!%
+}}%
+
+\UseSocket{tudcd/pagearea}%
+}
+%    \end{macrocode}
+% \iffalse
+%</option&class>
+% \fi

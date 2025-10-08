@@ -1,0 +1,138 @@
+% \iffalse meta-comment
+%/GitFileInfo=tudcd-base.dtx
+%
+%  TUDCD-Script -- Corporate Design of Technische Universität Dresden
+% ----------------------------------------------------------------------------
+%
+%  Copyright (C) Jochen Diepelt <David.diepelt@gmx.net>, 2025
+%
+% ----------------------------------------------------------------------------
+%
+%  This work may be distributed and/or modified under the conditions of the
+%  LaTeX Project Public License, either version 1.3c of this license or
+%  any later version. The latest version of this license is in
+%    http://www.latex-project.org/lppl.txt
+%  and version 1.3c or later is part of all distributions of
+%  LaTeX version 2008-05-04 or later.
+%
+%  This work has the LPPL maintenance status "maintained".
+%
+%  The current maintainer and author of this work is Jochen Diepelt.
+%
+% ----------------------------------------------------------------------------
+%
+% \fi
+%
+% \iffalse ins:batch + dtx:driver
+%<*ins>
+\ifx\documentclass\undefined
+  \input docstrip.tex
+  \ifToplevel{\batchinput{tudcd.ins}}
+\else
+  \let\endbatchfile\relax
+\fi
+\endbatchfile
+%</ins>
+%<*dtx>
+\ProvidesFile{tudcd-doc.dtx}[2025/10/02]
+\documentclass[english,ngerman]{tudcddoc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman=ngerman-x-latest]{hyphsubst}
+
+\usepackage{babel}
+\usepackage[babel]{microtype}
+\RecordChanges
+\PrintChanges
+\begin{document} % Diese Dokumentation dokumentiert NUR diese Datei
+  \title{\Large Dokumentation der Datei \texttt{\jobname.dtx} \\
+  \normalsize Generiert durch \texttt{\$ enginetex \jobname.dtx}}
+  \author{Jochen Diepelt}
+  \maketitle
+  \tableofcontents
+
+  \DocInput{tudcd-doc.dtx}
+\end{document}
+%</dtx>
+% \fi
+%
+% \selectlanguage{ngerman}
+%
+% \section{Dokumentationsklasse}
+%
+% Informationen über diese Datei
+%    \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{tudcddoc}[Dokumentationsklasse von Jochen Diepelt]
+%    \end{macrocode}
+% Nutzen von \tsobj[pkg]{scrlfile} um \tsobj[class]{ltxdoc} die Klasse \tsobj[class]{scrartcl} nutzen zu lassen
+%    \begin{macrocode}
+\RequirePackage{scrlfile}
+\ReplaceClass{article}{scrartcl}
+\BeforePackage{doc}{\let\oldmaketitle\maketitle}
+%    \end{macrocode}
+% Laden von \tsobj[pkg]{ltxdoc}
+%    \begin{macrocode}
+
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{ltxdoc}}
+
+\ProcessOptions\relax
+
+\LoadClass{ltxdoc}
+%    \end{macrocode}
+% Herstellen des alten \tsobj[macro]{\maketitle} Befehls
+%    \begin{macrocode}
+\let\maketitle\oldmaketitle
+%    \end{macrocode}
+% Auszeichnungsbefehle für Pakete und Klassen im Paket \tsobj[pkg]{codedescribe}, ohne die Möglichkeit Listings anzugeben.
+%    \begin{macrocode}
+\RequirePackage[nolisting]{codedescribe}%
+\RequirePackage{xcolor}
+\RequirePackage{tudcdcolor}
+\selectcolormodel{rgb}
+%    \end{macrocode}
+% Ergänzen der zusätzlichen Klasse für Klassen als Abgrenzung von Paketen
+% Aufgrund eines Tippfehlers in \tsobj[pkg]{codedescribe} wird dies separat gesetzt.
+%    \begin{macrocode}
+\ExplSyntaxOn
+\__codedesc_object_define:nnn{class}{pkg}{color=Dunkelblau}
+\__codedesc_object_define:nnn{hook}{code}{color=Rot1}
+\__codedesc_object_define:nnn{socket}{code}{color=Oliv1}
+\__codedesc_object_define:nnn{plug}{code}{color=Oliv1}
+%%\defobjectfmt{class}{pkg}{color=Violett1} Tippfehler
+%    \end{macrocode}
+% Anscheinend ist ein Makro \tsobj[macro]{\__codedesc_metacolor_tl:} nicht definiert
+%    \begin{macrocode}
+\tl_set:Nn \__codedesc_metacolor_tl: { \color{red} }
+\ExplSyntaxOff
+%    \end{macrocode}
+%
+% \section{Besondere Makros für die Dokumentation}
+%
+% \begin{codedescribe}[macro,new=0.5.0]{\tstudcdsocket,\tstudcdplug}
+% \begin{codesyntax}
+% \tsmacro{\tstuddocsocket}{Steckdosenname}
+% \tsmacro{\tstuddocplug}{Steckdosenname,Steckername}
+% \end{codesyntax}
+% Für die Dokumentation von Steckdosen (Sockets) und Steckern (Plugs) wird für die Umgebung \tsobj[env]{condesyntax} das Hilfsmakro
+%    \begin{macrocode}
+\newcommand\tstuddocsocket[2]{%
+\tsobj[macro]{\UseSocket}%
+\{\tsobj[socket]{#1}\}#2
+
+\tsobj[macro]{\NewSocketPlug}%
+\{\tsobj[socket]{#1}\}\tsargs[marg]{Steckername,Code}
+
+\tsobj[macro]{\AssignSocketPlug}%
+\{\tsobj[socket]{#1}\}\tsargs[marg]{Steckername}
+}
+\newcommand\tstuddocplug[2]{%
+\tsobj[macro]{\AssignSocketPlug}\{\tsobj[socket]{#1}\}\{\tsobj[plug]{#2}\}
+}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% Anschließend werden spezielle Auszeichnungsbefehle definiert
+%    \begin{macrocode}
+\newcommand{\TUDCDScript}{TUDCD-Script}
+\newcommand{\CD}{CD}
+%    \end{macrocode}

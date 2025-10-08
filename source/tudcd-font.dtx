@@ -1,5 +1,5 @@
 % \iffalse meta-comment
-%/GitFileInfo=tudscr-base.dtx
+%/GitFileInfo=tudcd-base.dtx
 %
 %  TUDCD-Script -- Corporate Design of Technische Universität Dresden
 % ----------------------------------------------------------------------------
@@ -34,7 +34,7 @@
 \endbatchfile
 %</ins>
 %<*dtx>
-\ProvidesFile{test.dtx}[2025/10/02]
+\ProvidesFile{tudcd-color.dtx}[2025/10/02]
 \RequirePackage{scrlfile}
 \ReplaceClass{article}{scrartcl}
 \BeforePackage{doc}{\let\oldmaketitle\maketitle}
@@ -53,23 +53,22 @@
   \maketitle
   \tableofcontents
 
-  \DocInput{test.dtx}
+  \DocInput{tudcd-font.dtx}
 \end{document}
 %</dtx>
 % \fi
 %
 % \selectlanguage{ngerman}
 %
+% \section{Schriften des Corporate Designs der TU Dresden}
 %
-%
-% \section{Titel des Abschnitts}
-% \begin{macro}{\testtudcd}
-% \changes{v1.0}{2025/10/02}{Hier ist eine Dokumentierte Änderung}^^A
-% Hier steht ein Text der hoffentlich etwas bewirkt
-% Hier ist die Dokumention des Makros
+% Die Hausschrift der TU Dresden wird mittels des Pakets \texttt{mono} eingebunden
 %    \begin{macrocode}
-%<*package>
-\newcommand\testtudcd{123}
-%</package>
+\RequirePackage{noto-serif}
+\RequirePackage{noto-sans}
+\RequirePackage{noto-mono}
 %    \end{macrocode}
-% \end{macro}
+% Da das
+
+% Anschließend werden die Einstellungen von \texttt{noto} so angepasst, dass die einzelnen Schriftschnitte und Größen
+% über die typischen \LaTeX{} Makros eingestellt werden können.

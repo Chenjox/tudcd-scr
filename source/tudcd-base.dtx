@@ -35,11 +35,7 @@
 %</ins>
 %<*dtx>
 \ProvidesFile{tudcd-base.dtx}[2025/10/02]
-\RequirePackage{scrlfile}
-\ReplaceClass{article}{scrartcl}
-\BeforePackage{doc}{\let\oldmaketitle\maketitle}
-\documentclass[english,ngerman]{ltxdoc}
-\let\maketitle\oldmaketitle
+\documentclass[english,ngerman]{tudcddoc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman=ngerman-x-latest]{hyphsubst}
 
@@ -60,21 +56,43 @@
 %
 % \selectlanguage{ngerman}
 %
-% \section{Grundlegende Einstellungen und Deklaration des \texttt{keyval} Interfaces}
+% \section{Grundlegende Einstellungen und Deklarationen}
 %
-% Es stellt sich heraus, dass das CD der Technischen Universität Dresden in einem Raster gesetzt werden kann,
+% Es stellt sich heraus, dass das \CD{} der Technischen Universität Dresden in einem Raster gesetzt werden kann,
 % wobei es eine Variante mit Marginalie und eine Variante ohne Marginalie gibt.
 % Weiterhin wird gefordert, dass das Raster so gut wie möglich umgesetzt werden kann, sollte ein Nutzer dies wünschen.
 % Auch kann es für den Druck sinnvoll sein, von einem farbigen Design in ein schwarz-weiß Design wechseln zu können.
 % Daraus ergibt sich die Notwendigkeit die Möglichkeiten von \KOMAScript{} ausnutzen zu können
 %    \begin{macrocode}
-\RequirePackage{scrbase}
+%<*class>
+\LoadClass{
+%<book> scrbook%
+%<article> scrartcl%
+%<report> scrreprt%
+}
+%</class>
+%<package>\RequirePackage{scrbase}
 %    \end{macrocode}
-% \begin{macro}{\TUDCDProcessOptions,\TUDCDExecuteOptions,\TUDCDoptions,\TUDCDoption}
+% Desweiteren werden die Möglichkeiten des Pakets \tsobj[pkg]{iftex} für das detektieren des Compilers benötigt, sowie
+% \tsobj[pkg]{xparse} für Makros welche über die Funktionalität von \tsobj[macro]{\newcommand} hinausgehen.
+%    \begin{macrocode}
+\RequirePackage{xparse}
+\RequirePackage{iftex}
+%    \end{macrocode}
+% \begin{codedescribe}[
+% macro,
+% new=0.5.0]{\TUDCDProcessOptions,\TUDCDExecuteOptions,\TUDCDoptions,\TUDCDoption}
+% \begin{codesyntax}
+% \tsmacro{\TUDCDProcessOptions}[key]{}
+% \tsmacro{\TUDCDExecuteOptions}[key]{}
+% \tsmacro{\TUDCDoptions}{keyval-list}
+% \tsmacro{\TUDCDoption}{key,val}
+% \end{codesyntax}
 % Mit den Möglichkeiten von \KOMAScript{} wird eine Familie an Optionen definiert, welche in den einzelnen Klassen specifiziert werden können.
 % Dabei wird zuerst eine Familie angelegt, und, in Analogie zu Falk Hanischs implementierung, entsprechende Befehle angelegt:
 %    \begin{macrocode}
 \DefineFamily{TUDCD}
+\DefineFamilyMember{TUDCD}
 \newcommand*\TUDCDProcessOptions[1][.\@currname.\@currext]{%
   \FamilyProcessOptions[{#1}]{TUDCD}%
 }
@@ -84,5 +102,57 @@
 \newcommand*\TUDCDoptions{\FamilyOptions{TUDCD}}
 \newcommand*\TUDCDoption{\FamilyOption{TUDCD}}
 %    \end{macrocode}
-% Damit können praktischerweise die gesetzten Werte mit |\TUDCDProcessOptions| und |\TUDCDExecuteOptions| ausgeführt werden.
-% \end{macro}
+% \end{codedescribe}
+%
+% Anschließend werden Hilfsmakros zum Anlegen von Schlüsseln definiert.
+%
+% \begin{codedescribe}[
+% macro,
+% new=0.5.0]{\tudcd@NumericalKey}
+% \begin{codesyntax}
+% \tsobj[macro]{\tudcd@NumericalKey}\tsargs[marg]{Schlüssel}\tsargs[oarg]{Säumniswert}\tsargs[marg]{Makroname}\tsargs[marg]{Werteliste}
+% \end{codesyntax}
+% Mit \tsobj[macro]{\tudcd@NumericalKey} wird ein Schlüssel mit dem Namen \tsobj[marg]{Schlüssel} definiert,
+% welcher standardmäßig den angegebenen \tsobj[oarg]{Säumniswert} enthält und mit die Werteliste in \tsobj[marg]{Werteliste} akzeptiert.
+% Beim Verarbeiten des Schlüssels wird der Wert im Makro \tsobj[macro]{\Makroname} gespeichert.
+% Es ist ein Wrapper von \KOMAScript s \tsobj[macro]{\FamilyNumericalKey}.
+%    \begin{macrocode}
+\newcommand\tudcd@NumericalKey[1][.\@currname.\@currext]{%
+ \FamilyNumericalKey[{#1}]{TUDCD}%
+}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% \begin{codedescribe}[
+% macro,
+% new=0.5.0]{\tudcd@switchcase}
+% \begin{codesyntax}
+% \tsobj[macro]{\tudcd@switchcase}\tsargs[marg]{Typ}\tsargs[marg]{Zeichenkette}\tsargs[marg]{Werteliste}\tsargs[marg]{Fail}
+% \end{codesyntax}
+% Mit diesem Makro ist es möglich Fallunterscheidungen auf Grundlage von Strings oder Integers vorzunehmen.
+%    \begin{macrocode}
+\ExplSyntaxOn % https://tex.stackexchange.com/a/386307
+\NewExpandableDocumentCommand{\tudcd@switchcase}{mmm+m}
+ {
+  \use:c { lyl_#1_switch:nnn } { #2 } { #3 } { #4 }
+ }
+
+\cs_new:Nn \lyl_string_switch:nnn
+ {
+  \str_case:onF { #1 } { #2 } { #3 }
+ }
+\cs_new:Nn \lyl_token_switch:nnn
+ {
+  \tl_case:onF { #1 } { #2 } { #3 }
+ }
+\cs_new:Nn \lyl_integer_switch:nnn
+ {
+  \int_case:onF { #1 } { #2 } { #3 }
+ }
+\cs_new:Nn \lyl_dimen_switch:nnn
+ {
+  \dim_case:onF { #1 } { #2 } { #3 }
+ }
+\ExplSyntaxOff
+%    \end{macrocode}
+% \end{codedescribe}

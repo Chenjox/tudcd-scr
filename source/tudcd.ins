@@ -35,13 +35,27 @@ LaTeX version 2025-05-04 or later.
 \askforoverwritefalse
 
 \generate{%
-  \file{tudcd-color.sty}{
+  \file{tudcddoc.cls}{
+    \from{tudcd-doc.dtx}{doc}%
+  }
+  \file{tudcdcolor.sty}{
     \from{tudcd-color.dtx}{package}%
   }
-  \file{test.sty}{%
-    \from{tudcd-base.dtx}{package}%
-    \from{test.dtx}{package}%
-    }
+  \file{tudcdartcl.cls}{
+    \from{tudcd-base.dtx}{class,article}%
+    \from{tudcd-area.dtx}{class,option,article}%
+    \from{tudcd-area.dtx}{class,body,article}%
+  }
+  \file{tudcdreprt.cls}{
+    \from{tudcd-base.dtx}{class,report}%
+    \from{tudcd-area.dtx}{class,option,report}%
+    \from{tudcd-area.dtx}{class,body,report}%
+  }
+  \file{tudcdbook.cls}{
+    \from{tudcd-base.dtx}{class,book}%
+    \from{tudcd-area.dtx}{class,option,book}%
+    \from{tudcd-area.dtx}{class,body,book}%
+  }
   }
 
 
