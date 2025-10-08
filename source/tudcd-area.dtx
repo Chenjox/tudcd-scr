@@ -81,14 +81,17 @@
 %
 % \begin{codedescribe}[
 % macro,
-% new=0.5.0]{
+% new=0.5.0,
+% update=0.5.2]{
 % \tudcd@outermargin,
 % \tudcd@innermargin,
 % \tudcd@logoheight,
 % \tudcd@secondlogoheight,
 % \tudcd@exclusionheight,
 % \tudcd@bottommargin,
-% \tudcd@qrheight}
+% \tudcd@qrheight,
+% \tudcd@gridcolumnwidth,
+% \tudcd@gridcolumnsep}
 % Diese Längen werden im Verarbeiten der Optionen der Klasse gesetzt.
 %    \begin{macrocode}
 \newlength\tudcd@outermargin%
@@ -98,6 +101,8 @@
 \newlength\tudcd@exclusionheight%
 \newlength\tudcd@bottommargin%
 \newlength\tudcd@qrheight%
+\newlength\tudcd@gridcolumnwidth%
+\newlength\tudcd@gridcolumnsep%
 %    \end{macrocode}
 % Die Bezeichnungen leiten sich dabei aus dem Leitfaden ab.
 % \end{codedescribe}
@@ -162,7 +167,6 @@
 %
 %
 %
-% Für das Standardvorgehen
 % \iffalse ^^A Guards für den wechsel von Ausführungsteil zu Optionenteil
 %</body&class>
 %<*option&class>
@@ -195,11 +199,9 @@
 % \end{codedescribe}
 % Anschließend werden über \tsobj[macro]{\geometry} die Maße ausgewählten Formats als Standardgeometrie festgelegt.
 % Da die Option erst spät verarbeitet wird,
-% wird die Einstellung der Seitengeometrie an den Haken \tsobj[hook]{begindocument/before} gehangen.
+% wird die Einstellung der Seitengeometrie an den Haken \tsobj[hook]{@tudcd/afterLateOptionsProcessed} gehangen.
 %    \begin{macrocode}
-\AddToHook{begindocument/before}{
-\TUDCDProcessOptions%
-\typeout{Selected Paper = \tudcd@paperselection}
+\AddToHook{@tudcd/afterLateOptionsProcessed}[area-1]{
 \tudcd@switchcase{string}{\tudcd@paperselection}
 {
   {4}{
@@ -210,10 +212,18 @@
     \setlength\tudcd@exclusionheight{5mm}%
     \setlength\tudcd@bottommargin{23.767mm}%
     \setlength\tudcd@qrheight{15mm}%
-    %
-    \setlength\marginparwidth{32mm}%
-    \setlength\marginparsep{6mm}%
-    %
+    \setlength\tudcd@gridcolumnsep{6mm}%
+    \iftudcd@usemargin% Mit Marginalie
+      \setlength\tudcd@gridcolumnwidth{32mm}%
+    \else% Ohne Marginalie
+      \setlength\tudcd@gridcolumnwidth{41.75mm}%
+    \fi%
+    \setlength\marginparwidth{\tudcd@gridcolumnwidth}%
+    \setlength\marginparsep{\tudcd@gridcolumnsep}%
+    \@ifpackageloaded{multicol}{
+      \setlength\columnsep{\tudcd@gridcolumnsep}%
+      \setlength\columnseprule{0pt}%
+    }{}
     \renewcommand\tudcd@selectedpaperformat{a4paper}%
     \FamilyKeyStateProcessed%
   }
@@ -229,9 +239,8 @@
   }
 }{%
 \ClassError{tudcd-area}{%
-Illegal paper format '\tudcd@paperselection' given!%
+Illegal paper format \tudcd@paperselection given!%
 }}%
-
 \UseSocket{tudcd/pagearea}%
 }
 %    \end{macrocode}
@@ -239,12 +248,17 @@ Illegal paper format '\tudcd@paperselection' given!%
 %
 % \subsection{Abfangen von Dokumentoptionen}
 %
-% Um \emph{klassische} Optionen abzufangen werden diese hier definiert.
+% Um \emph{klassische} Klassenoptionen abzufangen werden diese hier definiert.
+% Dabei werden diese an den Haken
 %
 % \begin{codedescribe}[
 % option,
-% new=0.5.1]{}
+% new=0.5.1]{a4paper,a3paper,a2paper}
+% \end{codedescribe}
 %
-% \iffalse
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{\tudcd@baseclass}}
+%    \end{macrocode}
+%    \begin{macrocode}
 %</option&class>
-% \fi
+%    \end{macrocode}

@@ -137,12 +137,28 @@
 %    \end{macrocode}
 % \end{codedescribe}
 %
+% \begin{codedescribe}[macro,new=0.5.2]{\tstuddochook}
+% \begin{codesyntax}
+% \tsmacro{\tstuddochook}{Hakenname}
+% \end{codesyntax}
+% Für die Dokumentation von Haken wird für die Umgebung \tsobj[env]{condesyntax} eine
+% Standarddokumentation erzeugt.
+%    \begin{macrocode}
+\newcommand\tstuddochook[1]{%
+\tsobj[macro]{\AddToHook}\{\tsobj[hook]{#1}\}\tsargs[oarg]{Bezeichnung}\tsargs[marg]{Code}%
+
+\tsobj[macro]{\DeclareHookRule}\{\tsobj[hook]{#1}\}\tsargs[marg]{Bezeichnung1,Relation,Bezeichnung2}%
+}%
+%    \end{macrocode}
+% \end{codedescribe}
+%
 % \begin{codedescribe}[macro,new=0.5.0]{\tstudcdsocket,\tstudcdplug}
 % \begin{codesyntax}
 % \tsmacro{\tstuddocsocket}{Steckdosenname}
 % \tsmacro{\tstuddocplug}{Steckdosenname,Steckername}
 % \end{codesyntax}
-% Für die Dokumentation von Steckdosen (Sockets) und Steckern (Plugs) wird für die Umgebung \tsobj[env]{condesyntax} das Hilfsmakro
+% Für die Dokumentation von Steckdosen (Sockets) und Steckern (Plugs) wird für die Umgebung \tsobj[env]{condesyntax}
+% eine Standarddokumentation erzeugt.
 %    \begin{macrocode}
 \newcommand\tstuddocsocket[2]{%
 \tsobj[macro]{\UseSocket}%

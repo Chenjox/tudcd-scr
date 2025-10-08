@@ -56,22 +56,41 @@
 %
 % \selectlanguage{ngerman}
 %
-% \section{Grundlegende Einstellungen und Deklarationen}
+% \section{Grundlegende Einstellungen mit \texttt{tudcd-base}}
 %
-% Es stellt sich heraus, dass das \CD{} der Technischen Universität Dresden in einem Raster gesetzt werden kann,
-% wobei es eine Variante mit Marginalie und eine Variante ohne Marginalie gibt.
-% Weiterhin wird gefordert, dass das Raster so gut wie möglich umgesetzt werden kann, sollte ein Nutzer dies wünschen.
-% Auch kann es für den Druck sinnvoll sein, von einem farbigen Design in ein schwarz-weiß Design wechseln zu können.
-% Daraus ergibt sich die Notwendigkeit die Möglichkeiten von \KOMAScript{} ausnutzen zu können
+% Alle Klassen von \TUDCDScript{} benötigen gemeinsame Deklarationen, welche in \tsobj[pkg]{tudcd-base} gesammelt werden.
+% Inbesondere leiten sich die Hauptklassen aus dieser Datei ab.
+%
+% Um nachfolgenden Paketen Intropektion zu ermöglichen wird das Makro \tsobj[macro]{\tudcd@baseclass} deklariert,
+% welches in einem Satz
+%
+%    \begin{macrocode}
+%<*!load>
+%    \end{macrocode}
+%
+% \begin{codedescribe}[
+% macro,
+% new=0.5.0
+% ]{\tudcd@loadclass}
+% \begin{codesyntax}
+% \tsmacro{\tudcd@loadclass}{Klassenname,Basisklasse,Kurzbeschreibung}
+% \end{codesyntax}
 %    \begin{macrocode}
 %<*class>
-\LoadClass{
-%<book> scrbook%
-%<article> scrartcl%
-%<report> scrreprt%
+\newcommand\tudcd@loadclass[3]{
+  \providecommand\tudcd@baseclass{#1}%
+  \providecommand\tudcd@currentclass{#2}%
+  \providecommand\tudcd@shortclassdecription{#3}%
 }
+%    \end{macrocode}
+% \end{codedescribe}
+%
+%    \begin{macrocode}
+%<book>\tudcd@loadclass{scrbook}{tudcdbook}{Book Class}%
+%<article>\tudcd@loadclass{scrartcl}{tudcdartcl}{Article Class}%
+%<report>\tudcd@loadclass{scrreprt}{tudcdreprt}{Report Class}%
 %</class>
-%<package>\RequirePackage{scrbase}
+\RequirePackage{scrbase}
 %    \end{macrocode}
 % Desweiteren werden die Möglichkeiten des Pakets \tsobj[pkg]{iftex} für das detektieren des Compilers benötigt, sowie
 % \tsobj[pkg]{xparse} für Makros welche über die Funktionalität von \tsobj[macro]{\newcommand} hinausgehen.
@@ -79,6 +98,9 @@
 \RequirePackage{xparse}
 \RequirePackage{iftex}
 %    \end{macrocode}
+%
+% \subsection{Schlüssel für die Konfiguration von \TUDCDScript}
+%
 % \begin{codedescribe}[
 % macro,
 % new=0.5.0]{\TUDCDProcessOptions,\TUDCDExecuteOptions,\TUDCDoptions,\TUDCDoption}
@@ -182,3 +204,103 @@
 \ExplSyntaxOff
 %    \end{macrocode}
 % \end{codedescribe}
+%
+% \subsection{Haken für \TUDCDScript}
+%
+% Um den Quelltext der Hauptklassen weitestgehend agnostisch bezüglich der Position im Quelltext zu halten,
+% werden in den Hauptklassen \emph{Haken} bereitgestellt, welche an klar definierten Zeitpunkten während
+% der Kompilation des Dokuments ausgeführt werden.
+%
+% Da diese Haken nur für Klassen relevant sind wird der entsprechende Tag gewählt.
+%    \begin{macrocode}
+%<*class>
+%    \end{macrocode}
+%
+% \subsubsection{Frühe Optionenverarbeitung}
+%
+% \begin{codedescribe}[
+% hook,
+% new=0.5.2]{@tudcd/beforeOptionsProcessed}
+% \begin{codesyntax}
+% \tstuddochook{@tudcd/beforeOptionsProcessed}
+% \end{codesyntax}
+%    \begin{macrocode}
+\NewHook{@tudcd/beforeOptionsProcessed}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% \begin{codedescribe}[
+% hook,
+% new=0.5.2]{@tudcd/afterOptionsProcessed}
+% \begin{codesyntax}
+% \tstuddochook{@tudcd/afterOptionsProcessed}
+% \end{codesyntax}
+%    \begin{macrocode}
+\NewHook{@tudcd/afterOptionsProcessed}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% \begin{codedescribe}[
+% hook,
+% new=0.5.2]{@tudcd/afterBaseClassLoaded}
+% \begin{codesyntax}
+% \tstuddochook{@tudcd/afterBaseClassLoaded}
+% \end{codesyntax}
+%    \begin{macrocode}
+\NewHook{@tudcd/afterBaseClassLoaded}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% \subsubsection{Späte Optionenverarbeitung}
+%
+% \begin{codedescribe}[
+% hook,
+% new=0.5.2
+% ]{@tudcd/beforeLateOptionsProcessed}
+% \begin{codesyntax}
+% \tstuddochook{@tudcd/beforeLateOptionsProcessed}
+% \end{codesyntax}
+% Der Haken \tsobj[hook]{@tudcd/beforeLateOptionsProcessed} stellt einen Ausführungsteil bereit, welcher
+% nach der Präampel und direkt vor Abarbeitung der Optionen einmalig ausgeführt wird.
+%    \begin{macrocode}
+\NewHook{@tudcd/beforeLateOptionsProcessed}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+%
+% \begin{codedescribe}[
+% hook,
+% new=0.5.2
+% ]{@tudcd/afterLateOptionsProcessed}
+% \begin{codesyntax}
+% \tstuddochook{@tudcd/afterLateOptionsProcessed}
+% \end{codesyntax}
+% Der Haken \tsobj[hook]{@tudcd/afterLateOptionsProcessed} stellt einen Ausführungsteil bereit, welcher
+% nach der Präampel und direkt nach Abarbeitung der Optionen einmalig ausgeführt wird.
+%    \begin{macrocode}
+\NewHook{@tudcd/afterLateOptionsProcessed}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% Die eben beschriebenen Haken werden hier ausgeführt.
+%
+%    \begin{macrocode}
+\AddToHook{begindocument/before}{
+  \UseOneTimeHook{@tudcd/beforeLateOptionsProcessed}%
+  \TUDCDProcessOptions%
+  \UseOneTimeHook{@tudcd/afterLateOptionsProcessed}%
+  }
+%</class>
+%</!load>
+%    \end{macrocode}
+%
+% Nachdem alles deklariert worden ist, wird die Klasse geladen und die entsprechenden Haken werden ausgeführt.
+%    \begin{macrocode}
+%<*load>
+\UseOneTimeHook{@tudcd/beforeOptionsProcessed}
+\TUDCDProcessOptions%
+\UseOneTimeHook{@tudcd/afterOptionsProcessed}
+\LoadClass{\tudcd@baseclass}
+\UseOneTimeHook{@tudcd/afterBaseClassLoaded}
+%</load>
+%    \end{macrocode}
