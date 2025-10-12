@@ -110,11 +110,67 @@
 %
 % \begin{codedescribe}[
 % macro,
+% new=0.5.1
+% ]{\dmacro,\dpkg,\dhook,\dsocket,\dplug,\doptionglobal,\doption,\denv}
+% \begin{codesyntax}
+% \dmacro{\macroname}\tsargs[marg]{Text}
+% \end{codesyntax}
+% Die Hilfsmakros helfen bei der korrekten Darstellung von Makros, Paketen, Haken, Steckdosen und Steckern.
+%    \begin{macrocode}
+\newcommand{\dmacro}[1]{\tsobj[macro]{#1}}%
+\newcommand{\dpkg}[1]{\tsobj[pkg]{#1}}%
+\newcommand{\dhook}[1]{\tsobj[hook]{#1}}%
+\newcommand{\dsocket}[1]{\tsobj[socket]{#1}}%
+\newcommand{\dplug}[1]{\tsobj[plug]{#1}}%
+\newcommand{\doptionglobal}[1]{\tsobj[option]{#1}}%
+\newcommand{\doption}[1]{\tsobj[option]{#1}}%
+\newcommand{\denv}[1]{\tsobj[env]{#1}}%
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% \begin{codedescribe}[
+% macro,
+% new=0.5.1
+% ]{\tstuddocglobaloption}
+% \begin{codesyntax}
+% \tsmacro{\tstuddocglobaloption}{Optionsname}
+% \end{codesyntax}
+% Für die Dokumentation von globalen Optionen (Klassenoptionen) wird für die Umgebung \denv{codesyntax}
+% eine Standarddokumentation erzeugt.
+%    \begin{macrocode}
+\newcommand{\tstuddocglobaloption}[1]{
+\tsobj[macro]{\documentclass}[\tsargs[option]{#1}]\tsargs[marg]{Klassenname}
+}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+
+% \begin{codedescribe}[
+% macro,
+% new=0.5.1
+% ]{\tstuddoclateoption}
+% \begin{codesyntax}
+% \tsmacro{\tstuddoclatekeyvaloption}{Optionsname}
+% \end{codesyntax}
+% Für die Dokumentation von späten Optionen wird für die Umgebung \denv{codesyntax}
+% eine Standarddokumentation erzeugt.
+%    \begin{macrocode}
+\newcommand{\tstuddoclateoption}[1]{
+\tsobj[macro]{\documentclass}[\tsobj[key]{#1}=\tsargs[val]{Wert}]\tsargs[marg]{Klassenname}%
+%
+\tsobj[macro]{\TUDCDOption}\{\tsobj[key]{#1}\}\tsargs[marg]{Wert}%
+}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+%
+% \begin{codedescribe}[
+% macro,
 % new=0.5.1]{\tstuddocif}
 % \begin{codesyntax}
 % \tsmacro{\tstuddocif}{Schaltername}
 % \end{codesyntax}
-% Für die Dokumentation von Schaltern wird für die Umgebung \tsobj[env]{condesyntax} eine
+% Für die Dokumentation von Schaltern wird für die Umgebung \denv{codesyntax} eine
 % Standarddokumentation erzeugt.
 %    \begin{macrocode}
 \newcommand\tstudocif[1]{

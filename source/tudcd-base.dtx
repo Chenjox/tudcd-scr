@@ -295,9 +295,12 @@
 %    \end{macrocode}
 %
 % Nachdem alles deklariert worden ist, wird die Klasse geladen und die entsprechenden Haken werden ausgeführt.
+% Dabei wird noch die allgemeine Option \dmacro{\DeclareOption*} definiert, um alle unbekannten und nicht abgefangenen
+% Optionen an die Basisklasse durchzureichen.
 %    \begin{macrocode}
 %<*load>
 \UseOneTimeHook{@tudcd/beforeOptionsProcessed}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{\tudcd@baseclass}}
 \TUDCDProcessOptions%
 \UseOneTimeHook{@tudcd/afterOptionsProcessed}
 \LoadClass{\tudcd@baseclass}

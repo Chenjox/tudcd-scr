@@ -1,4 +1,4 @@
-\documentclass{tudcdartcl}
+\documentclass[a4paper,twoside]{tudcdartcl}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman=ngerman-x-latest]{hyphsubst}
 
@@ -6,29 +6,30 @@
 \usepackage[babel]{microtype}
 \usepackage{blindtext}
 
-\TUDCDoption{paper}{a4paper}
+%\TUDCDoption{paper}{a4paper}
 \TUDCDoption{usemargin}{true}
 
 \usepackage{multicol}
+\usepackage{marginnote}
 
 \begin{document}
 
 \raggedright
 \begin{multicols}{2}
     \blindtext
-    \marginpar{\raggedright Hallo ich bin ein Text in der Marginalie}
+    \marginnote{\raggedright Hallo ich bin ein Text in der Marginalie}
 
     \blindtext[3]
-    \marginpar{\raggedright Hallo ich bin ein Text in der Marginalie}
+    \marginnote{\raggedright Hallo ich bin ein Text in der Marginalie}
 
     \blindtext[4]
-    \marginpar{\raggedright Hallo ich bin ein Text in der Marginalie}
+    \marginnote{\raggedright Hallo ich bin ein Text in der Marginalie}
 
     \blindtext[2]
-    \marginpar{\raggedright Hallo ich bin ein Text in der Marginalie}
+    \marginnote{\raggedright Hallo ich bin ein Text in der Marginalie}
 
     \blindtext[5]
-    \marginpar{\raggedright Hallo ich bin ein Text in der Marginalie}
+    \marginnote{\raggedright Hallo ich bin ein Text in der Marginalie}
 \end{multicols}
 
 \end{document}

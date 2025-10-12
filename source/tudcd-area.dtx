@@ -201,7 +201,7 @@
 % Da die Option erst spät verarbeitet wird,
 % wird die Einstellung der Seitengeometrie an den Haken \tsobj[hook]{@tudcd/afterLateOptionsProcessed} gehangen.
 %    \begin{macrocode}
-\AddToHook{@tudcd/afterLateOptionsProcessed}[area-1]{
+\AddToHook{@tudcd/afterLateOptionsProcessed}[pagearea-pagesetting]{
 \tudcd@switchcase{string}{\tudcd@paperselection}
 {
   {4}{
@@ -249,16 +249,24 @@ Illegal paper format \tudcd@paperselection given!%
 % \subsection{Abfangen von Dokumentoptionen}
 %
 % Um \emph{klassische} Klassenoptionen abzufangen werden diese hier definiert.
-% Dabei werden diese an den Haken
+% Dabei müssen diese am den Haken \dhook{@tudcd/beforeOptionsProcessed} angehängt werden,
+% da Optionen nur vor dem erstmaligen \dmacro{\ProcessOptions} deklariert werden können.
 %
 % \begin{codedescribe}[
 % option,
 % new=0.5.1]{a4paper,a3paper,a2paper}
-% \end{codedescribe}
+% \begin{codesyntax}
+% \tstuddocglobaloption{a4paper}
+% \end{codesyntax}
 %
 %    \begin{macrocode}
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{\tudcd@baseclass}}
+\AddToHook{@tudcd/beforeOptionsProcessed}[pagearea-intercept]{
+  \DeclareOption{a4paper}{\TUDCDoption{paper}{a4paper}}
+  \DeclareOption{a3paper}{\TUDCDoption{paper}{a3paper}}
+  \DeclareOption{a2paper}{\TUDCDoption{paper}{a2paper}}
+}
 %    \end{macrocode}
+% \end{codedescribe}
 %    \begin{macrocode}
 %</option&class>
 %    \end{macrocode}
