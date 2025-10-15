@@ -86,8 +86,11 @@
 % Auszeichnungsbefehle für Pakete und Klassen im Paket \tsobj[pkg]{codedescribe}, ohne die Möglichkeit Listings anzugeben.
 %    \begin{macrocode}
 \RequirePackage[nolisting]{codedescribe}%
-\RequirePackage{xcolor}
-\RequirePackage{tudcdcolor}
+\RequirePackage{hvlogos}% Herbert Voß Logos
+\RequirePackage{xcolor}%
+\RequirePackage{tudcdcolor}%
+\RequirePackage{tudcdfonts}%
+\RequirePackage{csquotes}
 \selectcolormodel{rgb}
 %    \end{macrocode}
 % Ergänzen der zusätzlichen Klasse für Klassen als Abgrenzung von Paketen
@@ -173,7 +176,7 @@
 % Für die Dokumentation von Schaltern wird für die Umgebung \denv{codesyntax} eine
 % Standarddokumentation erzeugt.
 %    \begin{macrocode}
-\newcommand\tstudocif[1]{
+\newcommand\tstuddocif[1]{
 \tsobj[macro]{\ #1true}%
 
 \tsobj[macro]{\ #1false}%
@@ -235,5 +238,6 @@
 % Anschließend werden spezielle Auszeichnungsbefehle definiert
 %    \begin{macrocode}
 \newcommand{\TUDCDScript}{TUDCD-Script}
+\newcommand{\TUD}{TUD}
 \newcommand{\CD}{CD}
 %    \end{macrocode}

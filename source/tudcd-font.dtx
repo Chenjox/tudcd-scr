@@ -34,12 +34,8 @@
 \endbatchfile
 %</ins>
 %<*dtx>
-\ProvidesFile{tudcd-color.dtx}[2025/10/02]
-\RequirePackage{scrlfile}
-\ReplaceClass{article}{scrartcl}
-\BeforePackage{doc}{\let\oldmaketitle\maketitle}
-\documentclass[english,ngerman]{ltxdoc}
-\let\maketitle\oldmaketitle
+\ProvidesFile{tudcd-fonts.dtx}[2025/10/02]
+\documentclass[english,ngerman]{tudcddoc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman=ngerman-x-latest]{hyphsubst}
 
@@ -62,13 +58,118 @@
 %
 % \section{Schriften des Corporate Designs der TU Dresden}
 %
-% Die Hausschrift der TU Dresden wird mittels des Pakets \texttt{mono} eingebunden
+% Für die Hausschrift der \TUD wird sowohl ein Paket \dpkg{tudcdfonts} bereitgestellt, als auch die Schrift in die Hauptklassen
+% eingebunden.
 %    \begin{macrocode}
-\RequirePackage{noto-serif}
-\RequirePackage{noto-sans}
-\RequirePackage{noto-mono}
+%<*package>
+\ProvidesPackage{tudcdfonts}[
+  Fonts of the corporate Design.
+]
+%</package>
+%<*body>
 %    \end{macrocode}
-% Da das
+%
+% Für den Fall, dass die Schriften als Paket geladen werden, bedarf es dem Paket \dpkg{iftex}, um abhängig von der gewählten Engine (\LaTeX, \XeLaTeX{} oder \LuaLaTeX{})
+% die Schriftauswahl zu bestimmen.
+%    \begin{macrocode}
+%<package>\RequirePackage{iftex}
+%    \end{macrocode}
+%
+% Formel ist die Schriftenfamilie Noto auf jeder \TeXLive Distribution ab 2023 vorhanden, auf \MiKTeX kann dies über das Nachladen des entsprechenden Pakets \dpkg{noto}
+% geschehen. Auf \macOS sollte bei Verwendung der \TeXLive Distribution Mac\TeX{} ebenfalls \dpkg{noto} vorhanden sein.
+%
+% Daher sind die Schriften der Familie Noto in einem \texttt{TDS} konformen Format installiert.
+%
+% \begin{codedescribe}[macro,new=0.5.2]{\iftudcd@font@serifdefault}
+% \begin{codesyntax}
+%    \tstuddocif{tudcd@font@serifdefault}
+% \end{codesyntax}
+% Dieser Schalter gibt an, ob die \textrm{serifenbehaftete} oder \textsf{serifenlose} Schrift als Standardschrift für den Fließtext eingestellt wird.
+% Standardmäßig auf Serifenlos gestellt.
+%    \begin{macrocode}
+\newif\iftudcd@font@serifdefault%
+\tudcd@font@serifdefaultfalse%
+%    \end{macrocode}
+% \end{codedescribe}
+%
+% Das Paket \dpkg{noto} wird hierbei für die Schrifteinstellung genutzt.
+%    \begin{macrocode}
+%<class>\AddToHook{@tudcd/afterOptionsProcessed}{
+\RequirePackage{noto}
 
-% Anschließend werden die Einstellungen von \texttt{noto} so angepasst, dass die einzelnen Schriftschnitte und Größen
-% über die typischen \LaTeX{} Makros eingestellt werden können.
+\iftutex % Unicode für Encodierung -> XeLaTeX LuaLateX
+\RequirePackage{fontspec}
+
+%<package>\PackageError{tudcdfonts}{Not Implemented!}{}%
+%<class>\ClassError{\tudcd@currentclass}{Not Implemented!}{}%
+%    \end{macrocode}
+%
+% Um für das herkömmliche \LaTeX{} die Schriften einzustellen, wird die Standardeinstellung von \dpkg{noto} übernommen.
+% Lediglich der Schriftschnitt für \textbf{Fettschrift} wird von dem \LaTeX-Standard \texttt{bx} auf \texttt{sb} gestellt.
+%    \begin{macrocode}
+\else % LaTeX und Konsorten
+\renewcommand{\bfdefault}{sb} % Semibold für Fettschrift
+%    \end{macrocode}
+% \begin{codedescribe}[macro,new=0.5.2]{
+%  \textcdul,\textcdel,\textcdl,\textcdls,\textcdm,\textcdsb,\textcdb,\textcdeb,\textcdub
+% }
+% \begin{codesyntax}
+% \tsmacro{\textcdsl}{Text}
+% \end{codesyntax}
+% Hier werden Schriftschalter und Schriftauswahlbefehle für die verbliebenen Schriftschnitte bereitgestellt.
+%    \begin{macrocode}
+\DeclareRobustCommand{\cdulseries}{\fontseries{ul}\selectfont}
+\DeclareTextFontCommand{\textcdul}{\cdulseries}
+\DeclareRobustCommand{\cdelseries}{\fontseries{el}\selectfont}
+\DeclareTextFontCommand{\textcdel}{\cdelseries}
+\DeclareRobustCommand{\cdlseries}{\fontseries{l}\selectfont}
+\DeclareTextFontCommand{\textcdl}{\cdlseries}
+\DeclareRobustCommand{\cdslseries}{\fontseries{sl}\selectfont}
+\DeclareTextFontCommand{\textcdls}{\cdslseries}
+\DeclareRobustCommand{\cdmseries}{\fontseries{m}\selectfont}
+\DeclareTextFontCommand{\textcdm}{\cdmseries}
+\DeclareRobustCommand{\cdsbseries}{\fontseries{sb}\selectfont}
+\DeclareTextFontCommand{\textcdsb}{\cdsbseries}
+\DeclareRobustCommand{\cdbseries}{\fontseries{b}\selectfont}
+\DeclareTextFontCommand{\textcdb}{\cdbseries}
+\DeclareRobustCommand{\cdebseries}{\fontseries{eb}\selectfont}
+\DeclareTextFontCommand{\textcdeb}{\cdebseries}
+\DeclareRobustCommand{\cdubseries}{\fontseries{ub}\selectfont}
+\DeclareTextFontCommand{\textcdub}{\cdubseries}
+%    \end{macrocode}
+% \end{codedescribe}
+%    \begin{macrocode}
+\fi%
+%<class>}%
+%    \end{macrocode}
+%
+% \subsection{Klassenoptionen für die Wahl der Schrift}
+%
+% \iffalse
+%</body>
+%<*class&option>
+% \fi
+%
+% \begin{codedescribe}[option,new=0.5.2]{useseriffont}
+% \begin{codesyntax}
+%    \tstuddocglobaloption{useseriffont}
+% \end{codesyntax}
+% Um eine Option zum Umstellen der Schriftart anzubieten, wird die Option \doptionglobal{useseriffont} angeboten.
+% diese stellt die Möglichkeit bereit, anstelle der \textsf{serifenlosen} Hausschrift, die serifenbehaftete Schrift der Schriftenfamilie Noto auszuwählen.
+%
+%    \begin{macrocode}
+\AddToHook{@tudcd/beforeOptionsProcessed}[fonts-serifdefault]{
+  \tudcd@BoolKey{useseriffont}{tudcd@font@serifdefault}
+}
+
+\AddToHook{@tudcd/afterOptionsProcessed}[fonts-serifdefault]{
+\iftudcd@font@serifdefault
+  % Noto stellt standardmäßig die Serifenschrift ein...
+\else
+  \PassOptionsToPackage{sfdefault}{noto}
+\fi
+}
+%    \end{macrocode}
+% \end{codedescribe}
+%
+%</class&option>
