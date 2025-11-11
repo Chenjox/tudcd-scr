@@ -1,11 +1,36 @@
 # LaTeX Klassen für das Corporate Design der Technischen Universität Dresden
 
-
+> [!CAUTION]
+> Diese Klassen sind noch in einem Entwicklungsstadium! Es können daher beim Updaten auf neuere Versionen Inkompatibilitäten entstehen!
+> Sollten Sie dennoch diese nutzen und Probleme oder Fehler finden, dann schreiben Sie bitte ein Issue.
 
 ## Wie verwende ich diese Klassen?
 
-Bevor eine nette Installationsdatei das abnimmt, ist der Ablauf:
+1. Wenden Sie im Verzeichnis `source` den Befehl `latex tudcd.ins` an.
+   Auf der Konsole sollte unter anderem die Zeile
+   ```
+   Generating file(s) ./tudcdartcl.cls ./tudcdreprt.cls ./tudcdbook.cls ./tudcddoc.cls ./tudcdcolor.sty ./tudcdfonts.sty
+   ```
+   erscheinen.
+2. Wenn nicht geschehen, setzen der `TEXMFHOME` Variable. Hilfe und weiterführende Links hierzu finden Sie unter
+   * (TeXLive Installationen)[https://tex.stackexchange.com/q/1137]
+   * (MikTeX Installationen)[https://tex.stackexchange.com/a/2066/272825]
+   * MacTeX Installationen: Hierzu habe ich keine Informationen gefunden, bei
+3. Erstellen des Verzeichnisses `TEXMFHOME/tex/latex/tudcd`
+4. Kopieren von
+   ```
+   tudcdartcl.cls
+   tudcdreprt.cls
+   tudcdbook.cls
+   tudcddoc.cls
+   tudcdcolor.sty
+   tudcdfonts.sty
+   ```
+   mitsamt der Logodateien in das Verzeichnis `TEXMFHOME/tex/latex/tudcd`
+5. Jetzt sollten Sie in der Lage sein, die Klassen zu verwenden.
 
+
+<!--
 ```bash
 # Wechseln in das source Verzeichnis
 cd source
@@ -29,7 +54,7 @@ for file in *; do
   fi
 # Verschieben der Dateien
 done
-```
+``` -->
 
 ## Featureliste
 
@@ -42,6 +67,10 @@ done
 * * [ ] Einstellen der Schriftgrößen
 * * [x] Hinzufügen von Titelseiten und Zitatseiten
 * * [ ] Einstellungen der Schriftmerkmale für Dokumentationsbestandteile
+* * [ ] Konfiguration des Logos
+* * [ ] Hinzufügen von Zweitlogos
+* * [ ] Beheben der Verzeichnisse
+* * [ ] Listeneinzüge und Abstände
 * * [ ] Leitfaden für die Benutzung der Dokumentenklasse
 * [ ] Posterklasse
 * * [x] Seitengeometrie
