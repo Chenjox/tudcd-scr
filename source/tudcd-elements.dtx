@@ -1,0 +1,202 @@
+% \iffalse meta-comment
+%/GitFileInfo=tudcd-elements.dtx
+%
+%  TUDCD-Script -- Corporate Design of Technische Universität Dresden
+% ----------------------------------------------------------------------------
+%
+%  Copyright (C) Jochen Diepelt <David.diepelt@gmx.net>, 2025
+%
+% ----------------------------------------------------------------------------
+%
+%  This work may be distributed and/or modified under the conditions of the
+%  LaTeX Project Public License, either version 1.3c of this license or
+%  any later version. The latest version of this license is in
+%    http://www.latex-project.org/lppl.txt
+%  and version 1.3c or later is part of all distributions of
+%  LaTeX version 2008-05-04 or later.
+%
+%  This work has the LPPL maintenance status "maintained".
+%
+%  The current maintainer and author of this work is Jochen Diepelt.
+%
+% ----------------------------------------------------------------------------
+%
+% \fi
+%
+% \iffalse ins:batch + dtx:driver
+%<*ins>
+\ifx\documentclass\undefined
+  \input docstrip.tex
+  \ifToplevel{\batchinput{tudcd.ins}}
+\else
+  \let\endbatchfile\relax
+\fi
+\endbatchfile
+%</ins>
+%<*dtx>
+\ProvidesFile{tudcd-elements.dtx}[2025/10/02]
+\documentclass[english,ngerman]{tudcddoc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman=ngerman-x-latest]{hyphsubst}
+
+\usepackage{babel}
+\usepackage[babel]{microtype}
+\RecordChanges
+\begin{document} % Diese Dokumentation dokumentiert NUR diese Datei
+  \title{\Large Dokumentation der Datei \texttt{\jobname.dtx} \\
+  \normalsize Generiert durch \texttt{\$ enginetex \jobname.dtx}}
+  \author{Jochen Diepelt}
+  \maketitle
+  \tableofcontents
+
+  \DocInput{tudcd-elements.dtx}
+\end{document}
+%</dtx>
+% \fi
+% \iffalse
+%<*body&class>
+% \fi
+% \selectlanguage{ngerman}
+%
+% \section{Gestaltungselemente für das Corporate Design der \TUD}
+%
+% In dieser Datei werden die Spät eingestellten Gestaltungelente definiert.
+% Dabei wird der KOMA Eigene Mechanismus zur Einstellung der Schriften genutzt, womit über \dmacro{\setkomafont} und
+% \dmacro{\usekomafont} die Schriften deklariert werden.
+%
+% Für Einstellungen der Abschnittsüberschriften wird das Macro \dmacro{\RedeclareSectionCommand}, ebenfalls aus \KOMAScript~\cite{komascriptDocs}, verwendet.
+%
+% \subsection{Einstellungen der Überschriften einzelner Gliederungsebenen}
+%
+%    \begin{macrocode}
+%<*class>
+\AddToHook{@tudcd/afterBaseClassLoaded}{%
+%    \end{macrocode}
+%
+% \begin{codedescribe}[
+%  new=0.5.3,
+%  macro]{\tudcd@elements@fontcolor,\sethighlightcolor}
+% \begin{codesyntax}
+% \tudcd@elements@fontcolor
+%
+% \tsmacro{\sethighlightcolor}{Farbe}
+% \end{codesyntax}
+%
+% Dieses Makro speichert die momentane Titeleifarbe, welche die Überschriften farblich vom Fließtext abheben kann.
+% Standardmäßig zeigt das Makro zu dem von \dpkg{xcolor} definiertem Alias für die momentane Farbe \dmacro{\color{.}}.
+%
+%    \begin{macrocode}
+\providecommand\tudcd@elements@fontcolor{\color{.}}%
+\renewcommand{\tudcd@elements@fontcolor}{\color{.}}%
+%    \end{macrocode}
+%
+% Um den Wert von \dmacro{\tudcd@elements@fontcolor} zu ändern, wird das Makro \dmacro{\sethighlightcolor} deklariert, welches
+% den Wert von \dmacro{\tudcd@elements@fontcolor} intern umdefiniert.
+%
+%    \begin{macrocode}
+\newcommand\sethighlightcolor[1]{
+  \renewcommand{\tudcd@elements@fontcolor}{\color{#1}}
+}
+%    \end{macrocode}
+%
+% \end{codedescribe}
+%
+% Für Berichte und Bücher werden die Kapitelseiten so gesetzt, dass der Fließtext auf einer festgelegten Höhe beginnt.
+% Dafür wird das Makro \dmacro{\chapterlinesformat} umdefiniert.
+%
+% Da die absolute Positionierung der Kapitelüberschriften in \KOMAScript nicht vorgesehen ist,
+% wird ein wenig einer Box um den Titel getrickst.
+%
+%    \begin{macrocode}
+%<*book|report>
+\newlength\tudcd@elements@height%
+\newsavebox\tudcd@elements@chaptertitlebox%
+%% Ebene, Nummer, Text
+\renewcommand{\chapterlinesformat}[3]{%
+\savebox{\tudcd@elements@chaptertitlebox}{\parbox[t][0pt][t]{\linewidth}{\raggedchapter\@hangfrom{#2}{#3}}}%
+\setlength\tudcd@elements@height{\dimexpr(\ht\tudcd@elements@chaptertitlebox+\dp\tudcd@elements@chaptertitlebox)}% Hier ist die komplette Höhe des Titels
+\global\tudcd@elements@height=\tudcd@elements@height%
+\makebox(\linewidth,0pt)[lt]{%
+  \usebox{\tudcd@elements@chaptertitlebox}%
+}%
+}%
+%    \end{macrocode}
+%
+% Anschließend wird für den Abstand zwischen Kapiteltitel und Fließtext mittels \dmacro{RedeclareSectionCommand} festgelegt
+%    \begin{macrocode}
+\RedeclareSectionCommand[
+  beforeskip=0pt,%
+  afterskip=12cm,%
+  afterindent=false,
+]{chapter}
+%</book|report>
+%    \end{macrocode}
+%
+% Anschließend werden die einzelnen Gestaltungselemente durchdefiniert.
+%
+% Gliederungsüberschriften können farbig hervorgehoben werden, daher wird den \dmacro{\setkomafont} Einstellungen
+% \dmacro{\tudcd@elements@fontcolor} mitgegeben.
+%
+%    \begin{macrocode}
+%<book|report>\setkomafont{chapter}{\huge\tudcd@elements@fontcolor\bfseries\sffamily}
+\setkomafont{section}{\LARGE\tudcd@elements@fontcolor\bfseries\sffamily}
+\setkomafont{subsection}{\Large\tudcd@elements@fontcolor\bfseries\sffamily}
+\setkomafont{subsubsection}{\normalsize\tudcd@elements@fontcolor\bfseries\sffamily}
+\setkomafont{paragraph}{\normalsize\tudcd@elements@fontcolor\bfseries}
+%    \end{macrocode}
+%
+% \todo{Wie könnte man Randnotizen einstellen?}
+%
+%
+%    \begin{macrocode}
+\newkomafont{marginote}{\footnotesize}
+\setkomafont{footnote}{\footnotesize\upshape}
+%    \end{macrocode}
+%
+% Der Titel und Untertitel wird auch entsprechend eingestellt
+% \todo{Wenn jetzt nicht fontsize=cdfont gewählt wird, was mache ich dann?}
+%
+%    \begin{macrocode}
+\setkomafont{title}{\fontsize{44}{45}\selectfont\tudcd@elements@fontcolor\sffamily\bfseries}
+\setkomafont{subtitle}{\fontsize{25}{30}\selectfont\tudcd@elements@fontcolor\sffamily}
+\setkomafont{author}{\sffamily\Huge}
+\setkomafont{subject}{\normalfont\Huge}
+\setkomafont{date}{\Huge}
+%    \end{macrocode}
+%
+% \begin{codedescribe}[
+  % new=0.5.3,
+  % macro
+  % ]{\maketitle}
+  %
+  %    \begin{macrocode}
+\providecommand{\maketitle}{}
+\renewcommand{\maketitle}{%
+\begin{tudcdtitlepage}
+  {\usekomafont{titlehead}\noindent\@titlehead\par}
+
+  {\usekomafont{title}\noindent\@title\par}
+
+  {\usekomafont{subtitle}\noindent\@subtitle\par}
+
+  {\usekomafont{subject}\noindent\@subject\par}
+
+  \bigskip
+
+  {\usekomafont{author}\noindent\@author\par}
+
+  \bigskip
+
+  {\usekomafont{date}\noindent\@date\par}
+
+  \vfill
+\end{tudcdtitlepage}
+}%
+%    \end{macrocode}
+%
+% \end{codedescribe}
+%    \begin{macrocode}
+}% @tudcd/afterBaseClassLoaded
+%</class>
+%    \end{macrocode}
+%
