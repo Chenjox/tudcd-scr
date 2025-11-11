@@ -60,3 +60,4 @@ source/install/*.bxt
 source/install/*.mtx
 source/install/*.sh
 source/install/*.tex
+__*
