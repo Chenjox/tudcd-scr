@@ -174,9 +174,66 @@
   \fi % logogerman
     }%
   }{\ClassError{\tudcd@currentclass}{Invalid logo color '\tudcd@logocolor' option given!}{}}
-}
+}%
 %    \end{macrocode}
 % \end{codedescribe}
+%
+% \begin{codedescribe}[new=0.5.4,key]{logocolor,logomodel,logolang}
+%
+% Um die Ausgabe des Logos global festzulegen, können die Schlüssel \doption{logocolor},\doption{logomodel}
+% und \doption{logolang} gesetzt werden.
+%    \begin{macrocode}
+\tudcd@NumericalKey{logocolor}[blue]{tudcd@logocoloroption}{%
+  {blue}{0},{white}{1},{black}{2}%
+}%
+\tudcd@NumericalKey{logomodel}[auto]{tudcd@logomodeloption}{%
+  {auto}{0},{cmyk}{1},{rgb}{2}%
+}%
+\tudcd@NumericalKey{logolang}[auto]{tudcd@logolanguageoption}{%
+  {auto}{0},{english}{1},{german}{2},{deutsch}{2}
+}%
+%%
+\AddToHook{@tudcd/afterLateOptionsProcessed}[elements-logooptions-processing]{
+  \tudcd@switchcase{string}{\tudcd@logocoloroption}{%
+    {0}{\renewcommand\tudcd@logocolor{blue}}%
+    {1}{\renewcommand\tudcd@logocolor{white}}%
+    {2}{\renewcommand\tudcd@logocolor{black}}%
+  }{\ClassError{\tudcd@currentclass}{Invalid logo color '\tudcd@logocoloroption' option given!}{}}%
+  \tudcd@switchcase{string}{\tudcd@logomodeloption}{%
+    {1}{\tudcd@colormodelrgbfalse}%
+    {2}{\tudcd@colormodelrgbtrue}%
+    {0}{% Versuch das Model zu detektieren
+      \def\tudcd@detectedcolormodel{\relax}%
+      \def\tudcd@detectedcolorspec{\relax}%
+      \extractcolorspecs{Brilliantblau}{\tudcd@detectedcolormodel}{\tudcd@detectedcolorspec}%
+      \ifx\tudcd@detectedcolormodel cymk%
+        \tudcd@colormodelrgbfalse
+      \else%
+        \tudcd@colormodelrgbtrue%
+      \fi%
+    }
+  }{\ClassError{\tudcd@currentclass}{Invalid logo model '\tudcd@logomodeloption' option given!}{}}%
+  \tudcd@switchcase{string}{\tudcd@logolanguageoption}{%
+    {1}{\tudcd@logogermanfalse}%
+    {2}{\tudcd@logogermantrue}%
+    {0}{% Versuch die Sprache zu detektieren
+      \tudcd@switchcase{string}{\languagename}{
+        {german}{\tudcd@logogermantrue}%
+        {ngerman}{\tudcd@logogermantrue}%
+        {austrian}{\tudcd@logogermantrue}%
+        {swiss}{\tudcd@logogermantrue}%
+        {english}{\tudcd@logogermanfalse}%
+      }{\tudcd@logogermanfalse}
+    }
+  }{\ClassError{\tudcd@currentclass}{Invalid logo language '\tudcd@logolanguageoption' option given!}{}}%
+}
+
+%    \end{macrocode}
+%
+%
+%
+% \end{codedescribe}
+%
 %
 % \subsection{Definition }
 %
@@ -185,7 +242,6 @@
 % welcher einmalig \emph{nach} laden des Pakets ausgeführt wird.
 %
 %    \begin{macrocode}
-%<*body&class>
 \AddToHook{package/scrlayer-scrpage/after}{
 %    \end{macrocode}
 %
@@ -337,7 +393,6 @@
 %    \begin{macrocode}
 \NewDocumentEnvironment{tudcdtitlepage}{ O{} }
   {
-  \tudcd@logogermantrue
   \newgeometry{%
     inner=\tudcd@innermargin,%
     outer=\tudcd@outermargin,%

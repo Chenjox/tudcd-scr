@@ -114,7 +114,7 @@
 % Dabei wird zuerst eine Familie angelegt, und, in Analogie zu Falk Hanischs implementierung, entsprechende Befehle angelegt:
 %    \begin{macrocode}
 \DefineFamily{TUDCD}
-\DefineFamilyMember{TUDCD}
+\DefineFamilyMember{TUDCD} % Ergo das Mitglied .klassenname.dateiendung wird der Familie TUDCD hinzugefügt.
 \newcommand*\TUDCDProcessOptions[1][.\@currname.\@currext]{%
   \FamilyProcessOptions[{#1}]{TUDCD}%
 }
@@ -153,6 +153,9 @@
 % welcher standardmäßig den angegebenen \tsobj[oarg]{Säumniswert} enthält und mit die Werteliste in \tsobj[marg]{Werteliste} akzeptiert.
 % Beim verarbeiten des Schlüssels wird der Wert im Makro \dmacro{\Makro} gespeichert.
 % Es ist ein Wrapper von \KOMAScript s \dmacro{\FamilyStringKey}.
+%
+% Aus Gründen die ich niht verstehe, funktioniert der Säumniswert manchmal nicht.
+%
 %    \begin{macrocode}
 \newcommand*\tudcd@StringKey[1][.\@currname.\@currext]{%
  \FamilyStringKey[{#1}]{TUDCD}%
